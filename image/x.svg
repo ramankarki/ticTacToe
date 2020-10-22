@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -52,18 +52,25 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="opacity:0.9938;fill:#eeeeee;stroke:#eeeeeb;stroke-width:1.01101"
+       id="rect2305"
+       width="25.447325"
+       height="25.447325"
+       x="0.50550437"
+       y="0.50550437" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:42.5003px;line-height:1.25;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;fill:#10316b;fill-opacity:1;stroke:none;stroke-width:1.06249"
-       x="1.8540572"
-       y="24.862671"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.5627px;line-height:1.25;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;fill:#10316b;fill-opacity:1;stroke:none;stroke-width:0.664055"
+       x="5.9101863"
+       y="20.718884"
        id="text12"
-       transform="scale(1.0441015,0.9577613)"><tspan
+       transform="scale(1.0441007,0.95776202)"><tspan
          sodipodi:role="line"
          id="tspan10"
-         x="1.8540572"
-         y="24.862671"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;fill:#10316b;fill-opacity:1;stroke-width:1.06249"
+         x="5.9101863"
+         y="20.718884"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;fill:#10316b;fill-opacity:1;stroke-width:0.664055"
          rotate="0 0">x</tspan></text>
   </g>
 </svg>
