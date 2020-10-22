@@ -24,6 +24,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  position: relative;
 }
 
 .row {
@@ -84,11 +85,12 @@ main {
   transition: -webkit-transform 200ms ease-in-out;
   transition: transform 200ms ease-in-out;
   transition: transform 200ms ease-in-out, -webkit-transform 200ms ease-in-out;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .shine-btn {
-  -webkit-box-shadow: 0 0 9px -1px;
-          box-shadow: 0 0 9px -1px;
+  -webkit-box-shadow: 0 0 9px -1px #B2FCFC;
+          box-shadow: 0 0 9px -1px #B2FCFC;
 }
 
 .new-game-btn:active {
@@ -96,11 +98,51 @@ main {
           transform: scale(0.92);
 }
 
+.game-board {
+  position: relative;
+}
+
 .game-board img {
   width: 100%;
   height: auto;
   border-radius: .3rem;
   grid-column: 4 span;
+  cursor: pointer;
+  -webkit-transition: -webkit-box-shadow 100ms ease-in-out;
+  transition: -webkit-box-shadow 100ms ease-in-out;
+  transition: box-shadow 100ms ease-in-out;
+  transition: box-shadow 100ms ease-in-out, -webkit-box-shadow 100ms ease-in-out;
+}
+
+.game-board img:hover {
+  -webkit-box-shadow: 0 0 9px -1px #B2FCFC;
+          box-shadow: 0 0 9px -1px #B2FCFC;
+}
+
+.won-text,
+.lose-text,
+.draw-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 2.1rem;
+  text-align: center;
+  color: #31a35d;
+  padding: 6.4rem 6.7rem;
+}
+
+.lose-text {
+  color: #E84672;
+}
+
+.draw-text {
+  color: #10316B;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .score-board {
@@ -132,5 +174,52 @@ main {
 
 .score-board .draw {
   color: #10316B;
+}
+
+.choose {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: scale(0);
+          transform: scale(0);
+  -webkit-transition: -webkit-transform 400ms ease-in-out;
+  transition: -webkit-transform 400ms ease-in-out;
+  transition: transform 400ms ease-in-out;
+  transition: transform 400ms ease-in-out, -webkit-transform 400ms ease-in-out;
+}
+
+.choose img {
+  display: block;
+  margin: 1.5rem;
+  border-radius: .3rem;
+  -webkit-transition: -webkit-transform 250ms ease-in-out;
+  transition: -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  cursor: pointer;
+}
+
+.choose img:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+
+.scale-up {
+  -webkit-transform: scale(1);
+          transform: scale(1);
 }
 /*# sourceMappingURL=index.css.map */

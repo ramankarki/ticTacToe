@@ -29,6 +29,7 @@ body {
     background-position: center;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .row {
@@ -84,10 +85,11 @@ main {
     margin: auto;
     cursor: pointer;
     transition: transform 200ms ease-in-out;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .shine-btn {
-    box-shadow: 0 0 9px -1px;
+    box-shadow: 0 0 9px -1px $sky-blue;
 }
 
 .new-game-btn:active {
@@ -100,7 +102,41 @@ main {
         height: auto;
         border-radius: .3rem;
         grid-column: 4 span;
+        cursor: pointer;
+        transition: box-shadow 100ms ease-in-out;
     }
+
+    img:hover {
+        box-shadow: 0 0 9px -1px $sky-blue; 
+    }
+
+    position: relative;
+}
+
+.won-text,
+.lose-text,
+.draw-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: $medium-text + .9rem;
+    // background-color: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    color: $green;
+    padding: 6.4rem 6.7rem;
+}
+
+.lose-text {
+    color: $red;
+}
+
+.draw-text {
+    color: $blue;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .score-board {
@@ -132,3 +168,33 @@ main {
     border-radius: .3rem;
     box-shadow: 0 5px 15px -3px;
 }
+
+.choose {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0);
+    transition: transform 400ms ease-in-out;
+    
+    img {
+        display: block;
+        margin: 1.5rem;
+        border-radius: .3rem;
+        transition: transform 250ms ease-in-out;
+        cursor: pointer;
+    }
+
+    img:hover {
+        transform: scale(1.2);
+    }
+}
+
+.scale-up {
+    transform: scale(1);
+}
+
