@@ -18,18 +18,18 @@ let UI = (function () {
     return {
         getDOM: () => DOM,
 
-        resetUIBoard: function() {
+        resetUIBoard: function () {
             let boxes = Array.prototype.slice.call(document.querySelectorAll(DOM.boxImage));
             boxes.forEach(element => {
                 element.src = "image/none.svg";
             });
         },
 
-        addUI: function(id, userOption) {
+        addUI: function (id, userOption) {
             document.getElementById(id).src = `image/${userOption}.svg`;
         },
 
-        updateUIScore: function(event, data) {
+        updateUIScore: function (event, data) {
             document.querySelector(DOM[event]).innerHTML = String(data);
         }
     };
@@ -37,7 +37,7 @@ let UI = (function () {
 })();
 
 
-let dataStructure = (function() {
+let dataStructure = (function () {
     let data = {
         board: [
             "", "", "",
@@ -50,7 +50,7 @@ let dataStructure = (function() {
     };
 
     return {
-        testing: function() {
+        testing: function () {
             console.log(data);
         },
 
@@ -62,19 +62,31 @@ let dataStructure = (function() {
             ];
         },
 
-        checkIfEmpty: function(id) {
-            if (data.board[Number(id)] === "") {
+        checkIfEmpty: function (board = false, id) {
+            let checkingBoard;
+            if (board === false) {
+                checkingBoard = data.board;
+            } else {
+                checkingBoard = board;
+            }
+
+            if (checkingBoard[Number(id)] === "") {
                 return true;
             }
             return false;
         },
 
-        addData: function(id, symbol) {
+        addData: function (id, symbol) {
             data.board[Number(id)] = symbol;
         },
 
-        checkIfWon: function (symbol) {
-            let box = data.board;
+        checkIfWon: function (board = false, symbol) {
+            let box;
+            if (board === false) {
+                box = data.board;
+            } else {
+                box = board;
+            }
             return (
                 ((box[0] === symbol) && (box[1] === symbol) && (box[2] === symbol)) ||
                 ((box[3] === symbol) && (box[4] === symbol) && (box[5] === symbol)) ||
@@ -87,7 +99,7 @@ let dataStructure = (function() {
             );
         },
 
-        checkIfDraw: function() {
+        checkIfDraw: function () {
             for (let i = 0; i < data.board.length; i++) {
                 if (data.board[i] === "") {
                     return false;
@@ -96,9 +108,13 @@ let dataStructure = (function() {
             return true;
         },
 
-        updateDataScore: function(event) {
+        updateDataScore: function (event) {
             data[event]++;
             return data[event];
+        },
+
+        copyBoard: function () {
+            return [...data.board];
         }
     };
 
@@ -177,12 +193,37 @@ let controller = (function (interface, data) {
         }
     };
 
+    function minimax(board, player) {
+        if (data.checkIfWon(board, player)) {
+            return 1; // -1 * -1 || 1 * 1
+        }
+
+        var move = -1;
+        var score = -2;
+
+        for (var i = 0; i < 9; ++i) { // For all moves
+            if (data.checkIfEmpty(board, board[i])) { // Only possible moves
+                var boardWithNewMove = [...board]; // Copy board to make it mutable
+                boardWithNewMove[i] = player; // Try the move
+                let scoreForTheMove = -minimax(boardWithNewMove, player === "x" ? "o" : "x"); // Count negative score for oponnent
+                if (scoreForTheMove > score) {
+                    score = scoreForTheMove;
+                    move = i;
+                } // Picking move that gives oponnent the worst score
+            }
+        }
+        if (move === -1) {
+            return 0; // No move - it's a draw
+        }
+        return score;
+    };
+
     function pcTurn(pcOption) {
         if (currentTurn === "pc") {
-            let id = 5;
+            let copyBoard = data.copyBoard();
+            let id = minimax(copyBoard, pcOption);
+            console.log(id);
 
-
-            
             data.addData(id, pcOption);
             UI.addUI(id, pcOption);
 
@@ -198,7 +239,7 @@ let controller = (function (interface, data) {
         }
     };
 
-    function gameEnd(event="draw") {
+    function gameEnd(event = "draw") {
         firstTurn = "user";
         userOption = "";
         document.querySelector(DOM.newGameBtn).classList.add("shine-btn");
