@@ -179,7 +179,7 @@ main {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    transform: scale(.6);
+    transform: scale(.8);
     transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
     opacity: 0;
     visibility: hidden;
@@ -190,6 +190,7 @@ main {
         border-radius: .3rem;
         transition: transform 250ms ease-in-out;
         cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
     img:hover {
