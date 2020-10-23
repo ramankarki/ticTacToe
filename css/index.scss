@@ -179,8 +179,10 @@ main {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    transform: scale(0);
-    transition: transform 400ms ease-in-out;
+    transform: scale(.6);
+    transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
+    opacity: 0;
+    visibility: hidden;
     
     img {
         display: block;
@@ -196,6 +198,8 @@ main {
 }
 
 .scale-up {
+    visibility: visible;
     transform: scale(1);
+    opacity: 1;
 }
 
