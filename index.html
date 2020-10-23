@@ -9,12 +9,19 @@
 </head>
 <body>
     <main>
+        <!-- This will be in big size -->
         <div class="heading">
             TIC TAC TOE
             <hr class="underline">
         </div>
+
+        <!-- game section with three row -->
         <div class="game-section row gap-1rem">
+
+            <!-- new game button -->
             <button class="new-game-btn shine-btn">New Game</button>
+
+            <!-- boxes to draw symbols -->
             <div class="game-board row gap-5px">
                 <img src="image/none.svg" id="0" alt="">
                 <img src="image/none.svg" id="1" alt="">
@@ -25,10 +32,14 @@
                 <img src="image/none.svg" id="6" alt="">
                 <img src="image/none.svg" id="7" alt="">
                 <img src="image/none.svg" id="8" alt="">
+
+                <!-- the text that will appear after the game ends -->
                 <div class="won-text hidden">You Won</div>
                 <div class="lose-text hidden">You Lose</div>
                 <div class="draw-text hidden">Draw</div>
             </div>
+
+            <!-- score board that displays won, lose and draw -->
             <div class="score-board row">
                 <div class="won">
                     <p class="text">Won</p>
@@ -45,6 +56,8 @@
             </div>
         </div>
     </main>
+
+    <!-- choose option appears after user clicks new game button -->
     <div class="choose">
         <img src="image/o.svg" alt="" id="o">
         <img src="image/x.svg" alt="" id="x">

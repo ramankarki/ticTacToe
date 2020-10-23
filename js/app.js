@@ -1,272 +1,244 @@
-let UI = (function () {
+let modal = (function () {
+    let data = {
+        board: [
+            "e", "e", "e",
+            "e", "e", "e",
+            "e", "e", "e"
+        ],
+        won: 0,
+        lose: 0,
+        draw: 0,
+        user: "",
+        pc: "",
+        turn: "user",
+    };
+
+
+    return {
+        testing: () => console.log(data),
+
+        reset() {
+            data.board = [
+                "e", "e", "e",
+                "e", "e", "e",
+                "e", "e", "e"
+            ];
+            data.user = "";
+            data.pc = "";
+        },
+
+        updateData(prop, value = false, index = false) {
+            switch (prop) {
+                case "board": data[prop][index] = value; break;
+                case "won": case "lose": case "draw": data[prop]++; break;
+                case "user": data[prop] = value; break;
+                case "pc": data[prop] = value; break;
+                case "turn": data[prop] = value; break;
+            };
+        },
+
+        getData(prop) {
+            if (prop === "board") return data[prop].slice();
+            return data[prop];
+        },
+
+    };
+
+})();
+
+
+let view = (function () {
     let DOM = {
         newGameBtn: ".new-game-btn",
-        box: ".game-board",
-        boxImage: ".game-board > img",
+        shineBtn: "shine-btn",
+        choose: ".choose",
+        box: ".game-board > img",
+        boxes: ".game-board",
+        scaleUp: "scale-up",
         won: "#won-score",
         lose: "#lose-score",
         draw: "#draw-score",
-        chooseOption: ".choose",
         wonText: ".won-text",
         loseText: ".lose-text",
         drawText: ".draw-text",
-        scaleUp: "scale-up",
-        hidden: "hidden"
-
+        hidden: "hidden",
     };
 
     return {
         getDOM: () => DOM,
 
-        resetUIBoard: function () {
-            let boxes = Array.prototype.slice.call(document.querySelectorAll(DOM.boxImage));
+        reset() {
+            let boxes = document.querySelectorAll(DOM.box);
+            boxes = Array.prototype.slice.call(boxes);
             boxes.forEach(element => {
                 element.src = "image/none.svg";
             });
         },
 
-        addUI: function (id, userOption) {
-            document.getElementById(id).src = `image/${userOption}.svg`;
+        updateBox(id, symbol) {
+            document.getElementById(id).src = `image/${symbol}.svg`;
         },
 
-        updateUIScore: function (event, data) {
-            document.querySelector(DOM[event]).innerHTML = String(data);
-        }
     };
 
 })();
 
 
-let dataStructure = (function () {
-    let data = {
-        board: [
-            "", "", "",
-            "", "", "",
-            "", "", ""
-        ],
-        won: 0,
-        lose: 0,
-        draw: 0
-    };
+let controller = (function (modal, view) {
 
-    return {
-        testing: function () {
-            console.log(data);
-        },
+    let DOM = view.getDOM();
 
-        resetDataBoard: () => {
-            data.board = [
-                "", "", "",
-                "", "", "",
-                "", "", ""
-            ];
-        },
-
-        checkIfEmpty: function (board = false, id) {
-            let checkingBoard;
-            if (board === false) {
-                checkingBoard = data.board;
-            } else {
-                checkingBoard = board;
-            }
-
-            if (checkingBoard[Number(id)] === "") {
-                return true;
-            }
-            return false;
-        },
-
-        addData: function (id, symbol) {
-            data.board[Number(id)] = symbol;
-        },
-
-        checkIfWon: function (board = false, symbol) {
-            let box;
-            if (board === false) {
-                box = data.board;
-            } else {
-                box = board;
-            }
-            return (
-                ((box[0] === symbol) && (box[1] === symbol) && (box[2] === symbol)) ||
-                ((box[3] === symbol) && (box[4] === symbol) && (box[5] === symbol)) ||
-                ((box[6] === symbol) && (box[7] === symbol) && (box[8] === symbol)) ||
-                ((box[0] === symbol) && (box[3] === symbol) && (box[6] === symbol)) ||
-                ((box[1] === symbol) && (box[4] === symbol) && (box[7] === symbol)) ||
-                ((box[2] === symbol) && (box[5] === symbol) && (box[8] === symbol)) ||
-                ((box[0] === symbol) && (box[4] === symbol) && (box[8] === symbol)) ||
-                ((box[6] === symbol) && (box[4] === symbol) && (box[2] === symbol))
-            );
-        },
-
-        checkIfDraw: function () {
-            for (let i = 0; i < data.board.length; i++) {
-                if (data.board[i] === "") {
-                    return false;
-                }
-            }
-            return true;
-        },
-
-        updateDataScore: function (event) {
-            data[event]++;
-            return data[event];
-        },
-
-        copyBoard: function () {
-            return [...data.board];
-        }
-    };
-
-})();
-
-
-let controller = (function (interface, data) {
-    let userOption = "";
-    let pcOption = "";
-    let firstTurn = "pc";
-    let currentTurn = "";
-    let DOM = interface.getDOM();
-
-    function setupEventListener() {
-        // clear data board and UI board when new game button is clicked
+    function eventListener() {
+        // when new game button is clicked,
         document.querySelector(DOM.newGameBtn).addEventListener("click", newGame);
 
-        // after new button is clicked, choose option is appeared
-        document.querySelector(DOM.chooseOption).addEventListener("click", chooseOption);
+        // choose X or O and update data in modal
+        document.querySelector(DOM.choose).addEventListener("click", chooseAnyOne);
 
-        // after everything is setup now start the game
-        document.querySelector(DOM.box).addEventListener("click", userTurn);
+        // after user chooses X or O, draw the user symbol on the box
+        document.querySelector(DOM.boxes).addEventListener("click", move);
+
     };
 
-    function newGame() {
-        // remove shine shadow
-        document.querySelector(DOM.newGameBtn).classList.remove("shine-btn");
-
-        // remove previous won, lose or darw text
+    function newGame(event) {
+        // remove prevoius game won, lose or draw text
         document.querySelector(DOM.wonText).classList.add(DOM.hidden);
         document.querySelector(DOM.loseText).classList.add(DOM.hidden);
         document.querySelector(DOM.drawText).classList.add(DOM.hidden);
+        
+        // remove shine-btn display choose option
+        event.target.classList.remove(DOM.shineBtn);
 
-        // reset data board
-        data.resetDataBoard();
+        // reset data
+        reset();
 
-        // reset UI board
-        UI.resetUIBoard();
-
-        // choose X or O
-        document.querySelector(DOM.chooseOption).classList.add(DOM.scaleUp);
+        // show options to choose between X or O
+        document.querySelector(DOM.choose).classList.add(DOM.scaleUp);
     };
 
-    function chooseOption(event) {
-        //only close choose when X or O button are clicked
+    function reset() {
+        // resets both modal and view data
+        modal.reset();
+        view.reset();
+    };
+
+    function chooseAnyOne(event) {
+        // if X or O option is clicked,
         if (event.target.id === "x" || event.target.id === "o") {
-            userOption = event.target.id;
-            pcOption = userOption === "x" ? "o" : "x";
-            currentTurn = firstTurn;
-            document.querySelector(DOM.chooseOption).classList.remove(DOM.scaleUp);
-            pcTurn(pcOption);
-        }
-    };
 
-    function userTurn(event) {
-        if (currentTurn === "user") {
-            let regex = /[0-8]/.test(event.target.id);
-            let id = event.target.id;
+            // pc will be opposite of user option
+            let pc = event.target.id === "x" ? "o" : "x";
 
-            // check if clicked box is empty in dataStructure
-            // if empty then add in dataStructure
-            if (userOption && regex && data.checkIfEmpty(id)) {
-                data.addData(id, userOption);
-                UI.addUI(id, userOption);
-                if (data.checkIfWon(userOption)) {
-                    gameEnd("won");
-                    return;
-                } else if (data.checkIfDraw()) {
-                    gameEnd();
-                    return;
-                }
+            // update both data for user and pc option
+            modal.updateData("user", event.target.id);
+            modal.updateData("pc", pc);
 
-                currentTurn = "pc";
-                pcTurn(pcOption);
+            // remove choose option
+            document.querySelector(DOM.choose).classList.remove(DOM.scaleUp);
+
+            // call pc if first turn is pc
+            if (modal.getData("turn") === "pc") {
+                pcTurn();
             }
         }
     };
 
-    function minimax(board, player) {
-        if (data.checkIfWon(board, player)) {
-            return 1; // -1 * -1 || 1 * 1
-        }
+    function pcTurn() {
 
-        var move = -1;
-        var score = -2;
-
-        for (var i = 0; i < 9; ++i) { // For all moves
-            if (data.checkIfEmpty(board, board[i])) { // Only possible moves
-                var boardWithNewMove = [...board]; // Copy board to make it mutable
-                boardWithNewMove[i] = player; // Try the move
-                let scoreForTheMove = -minimax(boardWithNewMove, player === "x" ? "o" : "x"); // Count negative score for oponnent
-                if (scoreForTheMove > score) {
-                    score = scoreForTheMove;
-                    move = i;
-                } // Picking move that gives oponnent the worst score
-            }
-        }
-        if (move === -1) {
-            return 0; // No move - it's a draw
-        }
-        return score;
     };
 
-    function pcTurn(pcOption) {
-        if (currentTurn === "pc") {
-            let copyBoard = data.copyBoard();
-            let id = minimax(copyBoard, pcOption);
-            console.log(id);
+    function move(event) {
+        let index = event.target.id;
+        let regex = /[0-8]/.test(index);
+        let board = modal.getData("board");
+        let user = modal.getData("user");
 
-            data.addData(id, pcOption);
-            UI.addUI(id, pcOption);
+        // if user has choosen their option (X or O),
+        // if clicked any one of the boxes,
+        // if it is empty,
+        if (user && regex && ifEmpty(Number(index), board)) {
 
-            if (data.checkIfWon(pcOption)) {
-                gameEnd("lose");
+            // update both data
+            modal.updateData("board", user, Number(index));
+            view.updateBox(index, user);
+
+            // get copy of board for checking if won or draw
+            board = modal.getData("board");
+            if (ifWon(board, user)) {
+                gameEnd("won");
                 return;
-            } else if (data.checkIfDraw()) {
-                gameEnd();
+            } else if (ifDraw(board)) {
+                gameEnd("draw");
                 return;
             }
 
-            currentTurn = "user";
+            // if game not ended then call pc
+            pcTurn();
         }
     };
 
-    function gameEnd(event = "draw") {
-        firstTurn = "user";
-        userOption = "";
-        document.querySelector(DOM.newGameBtn).classList.add("shine-btn");
-        data.resetDataBoard();
-        UI.resetUIBoard();
-        let value = data.updateDataScore(event);
-        interface.updateUIScore(event, value);
+    function ifEmpty(index, board) {
+        if (board[index] === "e") {
+            return true;
+        }
+        return false;
+    };
 
+    function ifWon(box, symbol) {
+        return (
+            ((box[0] === symbol) && (box[1] === symbol) && (box[2] === symbol)) ||
+            ((box[3] === symbol) && (box[4] === symbol) && (box[5] === symbol)) ||
+            ((box[6] === symbol) && (box[7] === symbol) && (box[8] === symbol)) ||
+            ((box[0] === symbol) && (box[3] === symbol) && (box[6] === symbol)) ||
+            ((box[1] === symbol) && (box[4] === symbol) && (box[7] === symbol)) ||
+            ((box[2] === symbol) && (box[5] === symbol) && (box[8] === symbol)) ||
+            ((box[0] === symbol) && (box[4] === symbol) && (box[8] === symbol)) ||
+            ((box[6] === symbol) && (box[4] === symbol) && (box[2] === symbol))
+        );
+    };
+
+    function ifDraw(board) {
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === "e") {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    function gameEnd(event) {
+        
+        // if won, lose or draw then display text and update for next firstTurn
         if (event === "won") {
-            firstTurn = "user";
+            modal.updateData("turn", "user");
             document.querySelector(DOM.wonText).classList.remove(DOM.hidden);
         } else if (event === "lose") {
-            firstTurn = "pc";
+            modal.updateData("turn", "pc");
             document.querySelector(DOM.loseText).classList.remove(DOM.hidden);
         } else {
+            modal.updateData("turn", "user");
             document.querySelector(DOM.drawText).classList.remove(DOM.hidden);
         }
+
+        // reset both data,
+        reset();
+
+        // highlight new button
+        document.querySelector(DOM.newGameBtn).classList.add(DOM.shineBtn);
+        
+        // update score board
+        modal.updateData(event);
+        document.querySelector(DOM[event]).innerHTML = modal.getData(event);
     };
+
 
     return {
-        init: function () {
+        init() {
             console.log("Application has started.");
-            setupEventListener();
-        }
+            eventListener();
+        },
     };
 
-})(UI, dataStructure);
-
+})(modal, view);
 
 controller.init();
