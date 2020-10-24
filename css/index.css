@@ -44,39 +44,36 @@ body {
 }
 
 .gap-1rem {
-  grid-row-gap: 2rem;
+  grid-row-gap: 1.5rem;
 }
 
 main {
   max-width: 280px;
   margin: auto;
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 
 .heading {
   color: white;
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-align: center;
   font-weight: 700;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .underline {
   border: none;
   height: 1px;
   background-color: #B2FCFC;
-  width: 80%;
+  width: 60%;
   margin: .3rem auto 0 auto;
 }
 
 .new-game-btn {
   display: block;
   border: 2px solid #B2FCFC;
-  border-top-left-radius: .3rem;
-  border-top-right-radius: .3rem;
-  border-bottom-left-radius: 1.5rem;
-  border-bottom-right-radius: 1.5rem;
-  padding: .5rem 1rem;
+  border-radius: 100rem;
+  padding: .4rem 1rem;
   font-size: 1.2rem;
   background-color: #10316B;
   color: #B2FCFC;
@@ -97,6 +94,19 @@ main {
 .new-game-btn:active {
   -webkit-transform: scale(0.92);
           transform: scale(0.92);
+}
+
+.user-symbol {
+  width: 40px;
+  height: auto;
+  display: block;
+  margin: auto;
+  border-radius: .3rem;
+  display: none;
+}
+
+.display {
+  display: block;
 }
 
 .game-board {
