@@ -143,8 +143,24 @@ let controller = (function (modal, view) {
         }
     };
 
-    function pcTurn() {
+    function spot(board) {
+        let spots = [];
+        for (let i = 0; i < board.length; i++) {
+            if (ifEmpty(i, board)) spots.push(i);
+        }
+        return spots;
+    };
 
+    function pcTurn() {
+        let pc = modal.getData("pc");
+        let board = modal.getData("board");
+        let data = minimax(board, pc);
+        modal.updateData("board", pc, data.score);
+        view.updateBox(data.score, pc);
+        console.log(data);
+    };
+
+    function minimax(board, player) {
     };
 
     function move(event) {
