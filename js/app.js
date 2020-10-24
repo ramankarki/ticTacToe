@@ -51,6 +51,7 @@ let view = (function () {
         loseText: ".lose-text",
         drawText: ".draw-text",
         hidden: "hidden",
+        userSymbol: ".user-symbol"
     };
 
     return {
@@ -111,6 +112,10 @@ let controller = (function (modal, view) {
 
             // remove choose option
             document.querySelector(DOM.choose).classList.remove(DOM.scaleUp);
+
+            let userSymbol = document.querySelector(DOM.userSymbol);
+            userSymbol.src = `image/${event.target.id}.svg`;
+            userSymbol.classList.add("display");
 
             // call pc if first turn is pc
             if (modal.getModalData("turn") === "pc") {
